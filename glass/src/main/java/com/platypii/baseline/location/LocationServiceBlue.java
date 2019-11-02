@@ -19,6 +19,12 @@ public class LocationServiceBlue extends LocationProvider {
 
     private final LocationProviderBluetooth locationProviderBluetooth;
 
+    @NonNull
+    @Override
+    protected String dataSource() {
+        return locationProviderBluetooth.dataSource();
+    }
+
     public LocationServiceBlue(BluetoothService bluetooth) {
         this.bluetooth = bluetooth;
         locationProviderBluetooth = new LocationProviderBluetooth(alti, bluetooth);

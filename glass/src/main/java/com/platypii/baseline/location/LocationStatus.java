@@ -32,14 +32,14 @@ public class LocationStatus {
             // Bluetooth enabled, but not connected
             icon = R.drawable.warning;
             switch (Services.bluetooth.getState()) {
-                case BluetoothState.BT_CONNECTING:
-                    message = "BT connecting...";
+                case BluetoothState.BT_STARTING:
+                    message = "GPS bluetooth starting...";
                     break;
-                case BluetoothState.BT_DISCONNECTED:
-                    message = "BT not connected";
+                case BluetoothState.BT_CONNECTING:
+                    message = "GPS bluetooth connecting...";
                     break;
                 default:
-                    message = "BT not connected";
+                    message = "GPS bluetooth not connected";
                     Log.e(TAG, "Bluetooth inconsistent state: preference enabled, state = " + Services.bluetooth.getState());
             }
         } else {

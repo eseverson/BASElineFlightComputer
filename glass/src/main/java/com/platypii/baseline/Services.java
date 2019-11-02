@@ -133,7 +133,7 @@ public class Services {
         Convert.metric = prefs.getBoolean("metric_enabled", false);
 
         // Bluetooth
-        bluetooth.preferences.load(context);
+        bluetooth.preferences.load(prefs);
     }
 
 }
