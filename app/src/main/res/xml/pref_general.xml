@@ -1,18 +1,19 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.preference.PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <SwitchPreference
+    <SwitchPreferenceCompat
         android:key="metric_enabled"
         android:summary="@string/pref_metric_description"
         android:title="@string/pref_metric"
         android:defaultValue="false"/>
 
-    <SwitchPreference
+    <SwitchPreferenceCompat
         android:key="auto_stop_enabled"
         android:summary="@string/pref_auto_stop_description"
         android:title="@string/pref_auto_stop"
         android:defaultValue="true"/>
 
-    <SwitchPreference
+    <SwitchPreferenceCompat
         android:key="barometer_enabled"
         android:summary="@string/pref_barometer_description"
         android:title="@string/pref_barometer"
@@ -50,4 +51,4 @@
         android:title="@string/pref_privacy"
         android:summary="@string/pref_privacy_description"/>
 
-</PreferenceScreen>
+</androidx.preference.PreferenceScreen>

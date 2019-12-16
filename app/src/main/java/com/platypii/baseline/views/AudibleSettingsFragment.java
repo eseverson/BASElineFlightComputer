@@ -10,20 +10,20 @@ import com.platypii.baseline.util.Numbers;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.preference.SwitchPreference;
 import android.view.View;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.preference.EditTextPreference;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.SwitchPreferenceCompat;
 import java.util.Locale;
 
 /**
  * This fragment shows the audible preferences
  */
-public class AudibleSettingsFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
+public class AudibleSettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceChangeListener {
 
     private AudibleSettings settings;
     private ListPreference modePreference;
@@ -34,21 +34,19 @@ public class AudibleSettingsFragment extends PreferenceFragment implements Prefe
     private EditTextPreference ratePreference;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.pref_audible);
-        setHasOptionsMenu(true);
 
         settings = Services.audible.settings;
 
-        final SwitchPreference enabledPreference = (SwitchPreference) findPreference("audible_enabled");
-        final SwitchPreference quietPreference = (SwitchPreference) findPreference("audible_quiet");
-        modePreference = (ListPreference) findPreference("audible_mode");
-        minPreference = (AudibleMinMaxPreference) findPreference("audible_min");
-        maxPreference = (AudibleMinMaxPreference) findPreference("audible_max");
-        precisionPreference = (EditTextPreference) findPreference("audible_precision");
-        intervalPreference = (EditTextPreference) findPreference("audible_interval");
-        ratePreference = (EditTextPreference) findPreference("audible_rate");
+        final SwitchPreferenceCompat enabledPreference = findPreference("audible_enabled");
+        final SwitchPreferenceCompat quietPreference = findPreference("audible_quiet");
+        modePreference = findPreference("audible_mode");
+        minPreference = findPreference("audible_min");
+        maxPreference = findPreference("audible_max");
+        precisionPreference = findPreference("audible_precision");
+        intervalPreference = findPreference("audible_interval");
+        ratePreference = findPreference("audible_rate");
 
         enabledPreference.setOnPreferenceChangeListener(this);
         quietPreference.setOnPreferenceChangeListener(this);

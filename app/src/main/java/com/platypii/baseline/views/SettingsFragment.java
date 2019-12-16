@@ -12,12 +12,12 @@ import com.platypii.baseline.views.bluetooth.BluetoothActivity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.preference.SwitchPreference;
 import android.util.Log;
 import android.view.View;
 import androidx.annotation.NonNull;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.SwitchPreference;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -25,7 +25,7 @@ import org.greenrobot.eventbus.ThreadMode;
 /**
  * This fragment shows the preferences
  */
-public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener, Preference.OnPreferenceClickListener {
+public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceChangeListener, Preference.OnPreferenceClickListener {
     private static final String TAG = "Settings";
 
     private SwitchPreference metricPreference;
@@ -34,15 +34,13 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
     private Preference signInPreference;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.pref_general);
-        setHasOptionsMenu(true);
 
-        metricPreference = (SwitchPreference) findPreference("metric_enabled");
+        metricPreference = findPreference("metric_enabled");
         metricPreference.setOnPreferenceChangeListener(this);
 
-        barometerPreference = (SwitchPreference) findPreference("barometer_enabled");
+        barometerPreference = findPreference("barometer_enabled");
         barometerPreference.setOnPreferenceChangeListener(this);
 
         findPreference("audible_settings").setOnPreferenceClickListener(this);
@@ -124,34 +122,43 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
     @Override
     public boolean onPreferenceClick(@NonNull Preference preference) {
-        if (preference.getKey().equals("audible_settings")) {
-            // Open audible settings activity
-            Analytics.logEvent(getActivity(), "click_audible_settings", null);
-            startActivity(new Intent(getActivity(), AudibleSettingsActivity.class));
-        } else if (preference.getKey().equals("bluetooth_settings")) {
-            // Open bluetooth settings activity
-            Analytics.logEvent(getActivity(), "click_bluetooth_settings", null);
-            startActivity(new Intent(getActivity(), BluetoothActivity.class));
-        } else if (preference.getKey().equals("sensor_info")) {
-            // Open sensor activity
-            Analytics.logEvent(getActivity(), "click_sensors", null);
-            startActivity(new Intent(getActivity(), SensorActivity.class));
-        } else if (preference.getKey().equals("sign_in")) {
-            // Handle sign in/out click
-            final BaseActivity activity = (BaseActivity) getActivity();
-            if (AuthState.getUser() != null) {
-                activity.clickSignOut();
-            } else {
-                activity.clickSignIn();
+        final BaseActivity activity = (BaseActivity) getActivity();
+        if (activity != null) {
+            switch (preference.getKey()) {
+                case "audible_settings":
+                    // Open audible settings activity
+                    Analytics.logEvent(activity, "click_audible_settings", null);
+                    startActivity(new Intent(activity, AudibleSettingsActivity.class));
+                    break;
+                case "bluetooth_settings":
+                    // Open bluetooth settings activity
+                    Analytics.logEvent(activity, "click_bluetooth_settings", null);
+                    startActivity(new Intent(activity, BluetoothActivity.class));
+                    break;
+                case "sensor_info":
+                    // Open sensor activity
+                    Analytics.logEvent(activity, "click_sensors", null);
+                    startActivity(new Intent(activity, SensorActivity.class));
+                    break;
+                case "sign_in":
+                    // Handle sign in/out click
+                    if (AuthState.getUser() != null) {
+                        activity.clickSignOut();
+                    } else {
+                        activity.clickSignIn();
+                    }
+                    break;
+                case "help_page":
+                    // Handle help page click
+                    Analytics.logEvent(activity, "click_help", null);
+                    Intents.openHelpUrl(activity);
+                    break;
+                case "privacy_page":
+                    // Handle privacy policy page click
+                    Analytics.logEvent(activity, "click_privacy", null);
+                    Intents.openPrivacyUrl(activity);
+                    break;
             }
-        } else if (preference.getKey().equals("help_page")) {
-            // Handle help page click
-            Analytics.logEvent(getActivity(), "click_help", null);
-            Intents.openHelpUrl(getActivity());
-        } else if (preference.getKey().equals("privacy_page")) {
-            // Handle privacy policy page click
-            Analytics.logEvent(getActivity(), "click_privacy", null);
-            Intents.openPrivacyUrl(getActivity());
         }
         return false;
     }

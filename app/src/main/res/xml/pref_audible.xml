@@ -1,12 +1,12 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreenCompat xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <SwitchPreference
+    <SwitchPreferenceCompat
         android:defaultValue="false"
         android:key="audible_enabled"
         android:title="@string/pref_audible_enabled"
         android:summary="@string/pref_audible_enabled_description" />
 
-    <SwitchPreference
+    <SwitchPreferenceCompat
         android:defaultValue="true"
         android:key="audible_quiet"
         android:title="@string/pref_audible_quiet"
@@ -53,4 +53,4 @@
         android:numeric="decimal"
         android:selectAllOnFocus="true" />
 
-</PreferenceScreen>
+</PreferenceScreenCompat>
