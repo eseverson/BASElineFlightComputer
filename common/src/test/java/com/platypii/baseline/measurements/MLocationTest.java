@@ -56,7 +56,7 @@ public class MLocationTest {
 
     @Test
     public void stringify() {
-        assertEquals("MLocation(1541348400990,47.600000,-122.330000,100.0,3,4)", seattle.toString());
+        assertEquals("MLocation(1541348400990,47.600000,-122.330000,100.0,-2,3,4)", seattle.toString());
     }
 
 }

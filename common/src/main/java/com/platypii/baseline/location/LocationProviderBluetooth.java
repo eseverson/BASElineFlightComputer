@@ -63,11 +63,13 @@ class LocationProviderBluetooth extends LocationProviderNMEA implements MyLocati
     public void start(@NonNull Context context) throws SecurityException {
         // Start NMEA updates
         bluetooth.addNmeaListener(this);
+        bluetooth.addLocationListener(this);
     }
 
     @Override
     public void stop() {
         super.stop();
         bluetooth.removeNmeaListener(this);
+        bluetooth.removeLocationListener(this);
     }
 }

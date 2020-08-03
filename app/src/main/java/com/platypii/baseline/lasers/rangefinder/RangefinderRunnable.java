@@ -171,6 +171,7 @@ class RangefinderRunnable implements Runnable {
                 protocol.onServicesDiscovered();
             } else {
                 Log.i(TAG, "Rangefinder service discovery failed");
+                // TODO: disconnect
             }
         }
 

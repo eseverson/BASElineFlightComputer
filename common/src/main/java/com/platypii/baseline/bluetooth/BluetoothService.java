@@ -3,6 +3,7 @@ package com.platypii.baseline.bluetooth;
 import com.platypii.baseline.BaseService;
 import com.platypii.baseline.common.R;
 import com.platypii.baseline.events.BluetoothEvent;
+import com.platypii.baseline.location.MyLocationListener;
 import com.platypii.baseline.util.Exceptions;
 
 import android.app.Activity;
@@ -54,6 +55,7 @@ public class BluetoothService implements BaseService {
     public boolean charging = false;
 
     final List<GpsStatus.NmeaListener> listeners = new ArrayList<>();
+    final List<MyLocationListener> locationListeners = new ArrayList<>();
 
     @Override
     public void start(@NonNull Context context) {
@@ -86,11 +88,19 @@ public class BluetoothService implements BaseService {
         AsyncTask.execute(() -> {
             bluetoothAdapter = getAdapter(activity);
             if (bluetoothAdapter != null) {
-                bluetoothRunnable = new BluetoothRunnable(BluetoothService.this, bluetoothAdapter);
+                if (isMohawk()) {
+                    bluetoothRunnable = new MohawkRunnable(BluetoothService.this, bluetoothAdapter, activity.getApplicationContext());
+                } else {
+                    bluetoothRunnable = new BluetoothRunnable(BluetoothService.this, bluetoothAdapter);
+                }
                 bluetoothThread = new Thread(bluetoothRunnable);
                 bluetoothThread.start();
             }
         });
+    }
+
+    private boolean isMohawk() {
+        return "Mohawk".equals(preferences.preferenceDeviceName);
     }
 
     /**
@@ -191,7 +201,7 @@ public class BluetoothService implements BaseService {
                     // Thread is dead, clean up
                     bluetoothRunnable = null;
                     bluetoothThread = null;
-                    if (bluetoothState != BT_STOPPED) {
+                    if (bluetoothState != BT_STOPPED && bluetoothState != BT_STOPPING) {
                         Log.e(TAG, "Unexpected bluetooth state: state should be STOPPED when thread has stopped");
                     }
                 } catch (InterruptedException e) {
@@ -230,4 +240,11 @@ public class BluetoothService implements BaseService {
         listeners.remove(listener);
     }
 
+    public void addLocationListener(MyLocationListener listener) {
+        locationListeners.add(listener);
+    }
+
+    public void removeLocationListener(MyLocationListener listener) {
+        locationListeners.remove(listener);
+    }
 }
