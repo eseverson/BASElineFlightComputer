@@ -15,6 +15,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import java.util.List;
 
+import static com.platypii.baseline.bluetooth.BluetoothState.BT_CONNECTED;
+
 public class NavView extends View implements MyLocationListener {
 
     private final float density = getResources().getDisplayMetrics().density;
@@ -87,6 +89,10 @@ public class NavView extends View implements MyLocationListener {
                     canvas.drawText("no target", center_x, center_y, paint);
                 }
             }
+        } else if (Services.bluetooth.getState() != BT_CONNECTED) {
+            paint.setColor(0xffeeeeee);
+            paint.setTextSize(24 * density);
+            canvas.drawText("not connected", center_x, center_y, paint);
         } else {
             paint.setColor(0xffeeeeee);
             paint.setTextSize(24 * density);
